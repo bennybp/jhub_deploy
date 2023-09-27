@@ -27,27 +27,7 @@ fi
 # 0. Copy over to the final run directory
 cp -a "${JHUB_VARIANT_DIR}" "${DEST_RUN_DIR}"
  
-# 1. Install docker if not installed
-if ! command -v docker &> /dev/null
-then
-    apt-get update
-    apt-get install -y ca-certificates curl gnupg
-    install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    chmod a+r /etc/apt/keyrings/docker.gpg
-
-    # Add the repository to Apt sources:
-    echo \
-      "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-      tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-    apt-get update
-    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-fi
-
-
-# 2. Download/install mambaforge
+# 1. Download/install mambaforge
 if [[ ! -d /opt/mambaforge ]]
 then
     wget -O /tmp/mambaforge_install.sh "${MAMBAFORGE_URL}"
@@ -59,19 +39,19 @@ then
     rm /tmp/mambaforge_install.sh
 fi
 
-# 3. Create the jupyterhub env
+# 2. Create the jupyterhub env
 source /opt/mambaforge/etc/profile.d/conda.sh
 source /opt/mambaforge/etc/profile.d/mamba.sh
 mamba env create -f "${DEST_RUN_DIR}/jupyterhub_env.yaml"
 
-# 4. Download & install traefik
+# 3. Download & install traefik
 cp -a "${SCRIPT_DIR}/traefik" "${DEST_RUN_DIR}/traefik"
 wget -O /tmp/traefik.tar.gz https://github.com/traefik/traefik/releases/download/v2.10.4/traefik_v2.10.4_linux_amd64.tar.gz
 tar -xv -C "${DEST_RUN_DIR}/traefik" -f /tmp/traefik.tar.gz traefik
 rm /tmp/traefik.tar.gz
 sed -i "s/###JHUB_DOMAIN###/${JHUB_DOMAIN}/g" "${DEST_RUN_DIR}/traefik/jhub_config.yaml"
 
-# 5. Prepare the run directory
+# 4. Prepare the run directory
 cp "${SCRIPT_DIR}/run.sh" > "${DEST_RUN_DIR}/run.sh"
 chmod u+x "${DEST_RUN_DIR}/run.sh" 
 
