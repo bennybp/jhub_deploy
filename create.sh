@@ -52,7 +52,11 @@ rm /tmp/traefik.tar.gz
 sed -i "s/###JHUB_DOMAIN###/${JHUB_DOMAIN}/g" "${DEST_RUN_DIR}/traefik/jhub_config.yaml"
 
 # 4. Prepare the run directory
-cp "${SCRIPT_DIR}/run.sh" > "${DEST_RUN_DIR}/run.sh"
+cp "${SCRIPT_DIR}/run.sh" "${DEST_RUN_DIR}/run.sh"
 chmod u+x "${DEST_RUN_DIR}/run.sh" 
 
+echo
+echo "##############################################################################"
 echo "Created ${DEST_RUN_DIR}. Use the run.sh script there to start the jupyterhub"
+echo "##############################################################################"
+echo

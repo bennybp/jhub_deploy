@@ -15,5 +15,5 @@ source /opt/mambaforge/etc/profile.d/mamba.sh
 mamba activate jupyterhub
 
 cd ${SCRIPT_DIR}
-docker compose up -d
+./traefik/traefik --configFile=./traefik/config.yaml
 jupyterhub -f jupyterhub_config.py
