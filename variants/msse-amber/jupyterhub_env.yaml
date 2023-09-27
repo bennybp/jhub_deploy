@@ -1,0 +1,21 @@
+name: jupyterhub
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - jupyterhub
+  - jupyterlab
+  - jupyterhub-singleuser
+  #- notebook
+  #- nbclassic
+
+  # Stuff for the class
+  - ambertools
+  - nglview
+  - matplotlib
+
+  - pip:
+    - GitPython
+    - jupyterhub-systemdspawner
+    - jupyterhub-tmpauthenticator

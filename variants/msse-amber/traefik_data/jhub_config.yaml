@@ -1,0 +1,15 @@
+http:
+  routers:
+    to-jhub:
+      rule: "Host(`jhub.education.molssi.org`)"
+
+      service: jhub
+      entrypoints: websecure
+      tls:
+        certresolver: letsencrypt
+
+  services: 
+    jhub:
+      loadBalancer:
+        servers:
+          - url: http://host.docker.internal:8000
