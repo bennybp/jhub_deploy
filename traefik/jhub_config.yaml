@@ -1,0 +1,15 @@
+http:
+  routers:
+    to-jhub:
+      rule: "Host(`###JHUB_DOMAIN###`)"
+
+      service: jhub
+      entrypoints: websecure
+      tls:
+        certresolver: letsencrypt
+
+  services: 
+    jhub:
+      loadBalancer:
+        servers:
+          - url: http://127.0.0.1:8000

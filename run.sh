@@ -2,10 +2,7 @@
 
 set -eu
 
-JHUB_VARIANT="###JHUB_VARIANT###"
-
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-JHUB_VARIANT_DIR="${SCRIPT_DIR}/variants/${JHUB_VARIANT}"
 
 if [ $(id -u) -ne 0 ]
 then
@@ -13,17 +10,10 @@ then
     exit 1
 fi
 
-if [[ ! -d "${JHUB_VARIANT_DIR}" ]]
-then
-    echo "Variant ${JHUB_VARIANT} does not exist?"
-    exit 1
-fi
- 
-
 source /opt/mambaforge/etc/profile.d/conda.sh
 source /opt/mambaforge/etc/profile.d/mamba.sh
 mamba activate jupyterhub
 
-cd ${JHUB_VARIANT_DIR}
+cd ${SCRIPT_DIR}
 docker compose up -d
 jupyterhub -f jupyterhub_config.py

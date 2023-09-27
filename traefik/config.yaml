@@ -1,0 +1,44 @@
+accessLog:
+  filePath: /traefik_data/access.log
+  fields:
+    defaultMode: keep
+    headers:
+      defaultMode: drop
+      names:
+        User-Agent: keep
+        Content-Type: keep
+
+log:
+  filePath: /traefik_data/traefik.log
+  level: DEBUG
+
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: :443
+    http:
+      tls: true
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      httpchallenge:
+        entrypoint: web
+      email: sysadmin@molssi.org
+      storage: /traefik_data/acme/acme.json
+
+providers:
+  file:
+    filename: /traefik_data/jhub_config.yaml
+    watch: true
